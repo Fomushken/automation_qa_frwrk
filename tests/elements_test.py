@@ -1,11 +1,15 @@
 import time
 
-from pages.elements_page import TextBoxPage
+import pytest
+
+from pages.elements_page import TextBoxPage, CheckBoxPage
 
 
 class TestElements:
+
     class TestTextBox:
 
+        # @pytest.mark.skip
         def test_text_box(self, driver):
             text_box_page = TextBoxPage(driver, "https://demoqa.com/text-box")
             text_box_page.open()
@@ -15,5 +19,13 @@ class TestElements:
             # assert input_data == output_data
 
             for in_data, out_data in zip(input_data, output_data):
-                assert in_data == out_data f'{in_data} mismatches {out_data}'
+                assert in_data == out_data, f'{in_data} mismatches {out_data}'
             time.sleep(1)
+
+    class TestCheckBox:
+
+        def test_check_box(self, driver):
+            check_box_page = CheckBoxPage(driver, "https://demoqa.com/checkbox")
+            check_box_page.open()
+            check_box_page.open_full_list()
+            check_box_page.click_random_checkbox()
