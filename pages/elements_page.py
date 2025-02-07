@@ -152,3 +152,26 @@ class WebTablePage(BasePage):
             self.fill_all_fields(person)
             self.click_submit()
             count -= 1
+
+    def get_person_data_list(self):
+        people_list = self.elements_are_present(self.locators.FULL_PEOPLE_LIST)
+        data = []
+        for item in people_list:
+            try:
+                item_list = item.text.split('\n')
+                item_data = {
+                    'first_name': item_list[0],
+                    'last_name': item_list[1],
+                    'age': item_list[2],
+                    'email': item_list[3],
+                    'salary': item_list[4],
+                    'department': item_list[5],
+                }
+                data.append(item_data)
+            except IndexError:
+                break
+        return data
+
+    def check_new_added_person(self):
+        person_data = self.get_person_data_list()
+        print(*person_data, sep='\n')

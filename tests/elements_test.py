@@ -61,4 +61,5 @@ class TestElements:
             web_table_page = WebTablePage(driver, 'https://demoqa.com/webtables')
             web_table_page.open()
             web_table_page.add_new_person()
+            web_table_page.check_new_added_person()
             time.sleep(5)

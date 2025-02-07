@@ -34,6 +34,8 @@ class RadioButtonPageLocators:
     RESULT_TEXT = (By.CSS_SELECTOR, 'p span[class="text-success"]')
 
 class WebTablePageLocators:
+
+    # form
     ADD_BUTTON = (By.CSS_SELECTOR, 'button[id="addNewRecordButton"]')
     FIRST_NAME_INPUT = (By.CSS_SELECTOR, 'input[id="firstName"]')
     LAST_NAME_INPUT = (By.CSS_SELECTOR, 'input[id="lastName"]')
@@ -42,3 +44,6 @@ class WebTablePageLocators:
     SALARY_INPUT = (By.CSS_SELECTOR, 'input[id="salary"]')
     DEPARTMENT_INPUT = (By.CSS_SELECTOR, 'input[id="department"]')
     SUBMIT_BUTTON = (By.CSS_SELECTOR, 'button[id="submit"]')
+
+    # table reading
+    FULL_PEOPLE_LIST = (By.CSS_SELECTOR, 'div[class="rt-tr-group"]')
