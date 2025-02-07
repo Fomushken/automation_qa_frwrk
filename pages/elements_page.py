@@ -3,7 +3,8 @@ import random
 from selenium.webdriver.common.by import By
 
 from generator.generator import generated_person
-from locators.elements_page_locators import TextBoxPageLocators, CheckBoxPageLocators, RadioButtonPageLocators
+from locators.elements_page_locators import TextBoxPageLocators, CheckBoxPageLocators, RadioButtonPageLocators, \
+    WebTablePageLocators
 from pages.base_page import BasePage
 
 class TextBoxPage(BasePage):
@@ -97,7 +98,7 @@ class RadioButtonPage(BasePage):
         return self.elements_are_present(self.locators.RADIO_BUTTONS)
 
     def click_random_radio_button(self, buttons_list):
-        random_button = buttons_list[random.randint(0, len(buttons_list)-1-1)]
+        random_button = buttons_list[random.randint(0, len(buttons_list)-1)]
         random_button.click()
         return random_button.text
 
@@ -107,3 +108,47 @@ class RadioButtonPage(BasePage):
         for _ in range(times):
             res.append((self.click_random_radio_button(buttons_list), self.get_output_result()))
         return res
+
+class WebTablePage(BasePage):
+    locators = WebTablePageLocators()
+
+    def click_add_button(self) -> None:
+        self.element_is_visible(self.locators.ADD_BUTTON).click()
+
+    def get_person(self) -> dict[str, str | int]:
+        person_info = next(generated_person())
+        first_name = person_info.first_name
+        lastname = person_info.last_name
+        email = person_info.email
+        age = person_info.age
+        salary = person_info.salary
+        department = person_info.department
+        return {
+            'first_name': first_name,
+            'last_name': lastname,
+            'email': email,
+            'age': age,
+            'salary': salary,
+            'department': department,
+        }
+
+    def fill_all_fields(self, person_data) -> None:
+        self.element_is_visible(self.locators.FIRST_NAME_INPUT).send_keys(person_data['first_name'])
+        self.element_is_visible(self.locators.LAST_NAME_INPUT).send_keys(person_data['last_name'])
+        self.element_is_visible(self.locators.EMAIL_INPUT).send_keys(person_data['email'])
+        self.element_is_visible(self.locators.AGE_INPUT).send_keys(person_data['age'])
+        self.element_is_visible(self.locators.SALARY_INPUT).send_keys(person_data['salary'])
+        self.element_is_visible(self.locators.DEPARTMENT_INPUT).send_keys(person_data['department'])
+
+    def click_submit(self) -> None:
+        self.element_is_visible(self.locators.SUBMIT_BUTTON).click()
+
+    def add_new_person(self):
+        # count = random.randint(1, 40)
+        count = 1
+        while count != 0:
+            self.click_add_button()
+            person = self.get_person()
+            self.fill_all_fields(person)
+            self.click_submit()
+            count -= 1
