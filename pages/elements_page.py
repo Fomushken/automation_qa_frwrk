@@ -1,16 +1,16 @@
 import random
-import time
 
 from selenium.webdriver.common.by import By
 
-from conftest import driver
 from generator.generator import generated_person
-from locators.elements_page_locators import TextBoxPageLocators, CheckBoxPageLocators
+from locators.elements_page_locators import TextBoxPageLocators, CheckBoxPageLocators, RadioButtonPageLocators
 from pages.base_page import BasePage
 
 class TextBoxPage(BasePage):
+    """ Testing of textbox form and result that received. They must match """
     locators = TextBoxPageLocators()
 
+    # Method uses generator to create a person, then fills the form and returns data of the person
     def fill_all_fields(self):
         person_info = next(generated_person())
         full_name = person_info.full_name
@@ -26,6 +26,7 @@ class TextBoxPage(BasePage):
         button_element.click()
         return full_name, email, current_address, permanent_address
 
+    # This method collects and returns person's data that appears after submitting the form
     def check_filled_form(self):
         full_name = self.element_is_present(self.locators.CREATED_FULL_NAME).text.split(':')[1]
         email = self.element_is_present(self.locators.CREATED_EMAIL).text.split(':')[1]
@@ -35,12 +36,15 @@ class TextBoxPage(BasePage):
         return full_name, email, current_address, permanent_address
 
 class CheckBoxPage(BasePage):
+    """ Testing of checkbox form and result that received. They must match """
 
     locators = CheckBoxPageLocators()
 
+    # This method clicks "expand" button to show full list of checkboxes
     def open_full_list(self):
         self.element_is_visible(self.locators.EXPAND_ALL_BUTTON).click()
 
+    # This method clicks random checkboxes 21 times
     def click_random_checkbox(self):
         item_list = self.elements_are_visible(self.locators.ITEM_LIST)
         count = 21
@@ -53,6 +57,8 @@ class CheckBoxPage(BasePage):
             else:
                 break
 
+    # Collect all actually checked checkboxes using CSS selectors.
+    # returns list of checkboxes as formatted string
     def get_checked_checkboxes(self):
         checked_list = self.elements_are_present(self.locators.CHECKED_ITEMS)
         data = []
@@ -61,9 +67,43 @@ class CheckBoxPage(BasePage):
             data.append(item_title.text.lower())
         return str(data).replace(' ', '').replace('doc', '').replace('.', '').lower()
 
+    # Collects output from the page after clicking checkboxes.
+    # Returns list as formatted string
     def get_output_result(self):
         result_list = self.elements_are_present(self.locators.OUTPUT_RESULT)
         data = []
         for item in result_list:
             data.append(item.text)
         return str(data).replace(' ', '').lower()
+
+class RadioButtonPage(BasePage):
+
+    locators = RadioButtonPageLocators()
+
+    def click_the_radio_button(self, choice):
+        choices = {
+            'yes': self.locators.YES_BUTTON,
+            'impressive': self.locators.IMPRESSIVE_BUTTON,
+            'no': self.locators.NO_BUTTON,
+        }
+
+        radio = self.element_is_visible(choices[choice])
+        radio.click()
+
+    def get_output_result(self):
+        return self.element_is_present(self.locators.RESULT_TEXT).text
+
+    def get_buttons_list(self):
+        return self.elements_are_present(self.locators.RADIO_BUTTONS)
+
+    def click_random_radio_button(self, buttons_list):
+        random_button = buttons_list[random.randint(0, len(buttons_list)-1-1)]
+        random_button.click()
+        return random_button.text
+
+    def click_random_radio_buttons(self, times):
+        buttons_list = self.get_buttons_list()
+        res = []
+        for _ in range(times):
+            res.append((self.click_random_radio_button(buttons_list), self.get_output_result()))
+        return res
