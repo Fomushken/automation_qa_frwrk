@@ -1,4 +1,5 @@
 import time
+from tabnanny import check
 
 import pytest
 
@@ -9,7 +10,7 @@ class TestElements:
 
     class TestTextBox:
 
-        # @pytest.mark.skip
+        @pytest.mark.skip
         def test_text_box(self, driver):
             text_box_page = TextBoxPage(driver, "https://demoqa.com/text-box")
             text_box_page.open()
@@ -20,7 +21,6 @@ class TestElements:
 
             for in_data, out_data in zip(input_data, output_data):
                 assert in_data == out_data, f'{in_data} mismatches {out_data}'
-            time.sleep(1)
 
     class TestCheckBox:
 
@@ -29,3 +29,6 @@ class TestElements:
             check_box_page.open()
             check_box_page.open_full_list()
             check_box_page.click_random_checkbox()
+            input_checkbox = check_box_page.get_checked_checkboxes()
+            output_result = check_box_page.get_output_result()
+            assert input_checkbox == output_result, f'{input_checkbox} mismatches {output_result}\n\nCheck checkboxes'
