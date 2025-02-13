@@ -1,3 +1,4 @@
+import random
 import time
 
 import pytest
@@ -9,7 +10,7 @@ class TestElements:
 
     class TestTextBox:
 
-        @pytest.mark.skip
+        # @pytest.mark.skip
         def test_text_box(self, driver):
             text_box_page = TextBoxPage(driver, "https://demoqa.com/text-box")
             text_box_page.open()
@@ -20,7 +21,7 @@ class TestElements:
                 assert in_data == out_data, f'{in_data} mismatches {out_data}'
 
     class TestCheckBox:
-        @pytest.mark.skip
+        # @pytest.mark.skip
         def test_check_box(self, driver):
             check_box_page = CheckBoxPage(driver, "https://demoqa.com/checkbox")
             check_box_page.open()
@@ -32,7 +33,7 @@ class TestElements:
 
     class TestRadioButton:
 
-        @pytest.mark.skip
+        # @pytest.mark.skip
         def test_radio_button(self, driver):
             radio_button_page = RadioButtonPage(driver, "https://demoqa.com/radio-button")
             radio_button_page.open()
@@ -47,7 +48,7 @@ class TestElements:
             assert output_impressive == 'Impressive', "'Impressive' hasn't been selected"
             assert output_no == 'No', "'No' hasn't been selected"
 
-        @pytest.mark.skip
+        # @pytest.mark.skip
         def test_random_radio_buttons(self, driver):
             radio_button_page = RadioButtonPage(driver, "https://demoqa.com/radio-button")
             radio_button_page.open()
@@ -56,10 +57,13 @@ class TestElements:
                 assert result[1] == result[0], f'clicked {result[0]} received {result[1]}'
 
     class TestWebTable:
-
+        # @pytest.mark.skip
         def test_web_table_add_person(self, driver):
             web_table_page = WebTablePage(driver, 'https://demoqa.com/webtables')
             web_table_page.open()
-            web_table_page.add_new_person()
-            web_table_page.check_new_added_person()
-            time.sleep(5)
+            added_persons = list(web_table_page.add_new_person(random.randint(10, 40)))
+            time.sleep(1)
+            web_table_page.expand_maximum_rows()
+            person_list_result = web_table_page.get_person_data_list()
+            for added_person in added_persons:
+                assert added_person in person_list_result, f'person {added_person} not in result'

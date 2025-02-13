@@ -16,8 +16,8 @@ class TextBoxPage(BasePage):
         person_info = next(generated_person())
         full_name = person_info.full_name
         email = person_info.email
-        current_address = person_info.current_address
-        permanent_address = person_info.permanent_address
+        current_address = person_info.current_address.replace('\n', ' ')
+        permanent_address = person_info.permanent_address.replace('\n', ' ')
         self.element_is_visible(self.locators.FULL_NAME).send_keys(full_name)
         self.element_is_visible(self.locators.EMAIL).send_keys(email)
         self.element_is_visible(self.locators.CURRENT_ADDRESS).send_keys(current_address)
@@ -66,7 +66,7 @@ class CheckBoxPage(BasePage):
         for box in checked_list:
             item_title = box.find_element(By.XPATH, self.locators.ITEM_TITLE)
             data.append(item_title.text.lower())
-        return str(data).replace(' ', '').replace('doc', '').replace('.', '').lower()
+        return str(data).replace(' ', '').replace('.doc', '').lower()
 
     # Collects output from the page after clicking checkboxes.
     # Returns list as formatted string
@@ -95,7 +95,7 @@ class RadioButtonPage(BasePage):
         return self.element_is_present(self.locators.RESULT_TEXT).text
 
     def get_buttons_list(self):
-        return self.elements_are_present(self.locators.RADIO_BUTTONS)
+        return self.elements_are_visible(self.locators.RADIO_BUTTONS)
 
     def click_random_radio_button(self, buttons_list):
         random_button = buttons_list[random.randint(0, len(buttons_list)-1)]
@@ -126,10 +126,10 @@ class WebTablePage(BasePage):
         return {
             'first_name': first_name,
             'last_name': lastname,
-            'email': email,
             'age': age,
+            'email': email,
             'salary': salary,
-            'department': department,
+            'department': department[0:24],
         }
 
     def fill_all_fields(self, person_data) -> None:
@@ -143,15 +143,16 @@ class WebTablePage(BasePage):
     def click_submit(self) -> None:
         self.element_is_visible(self.locators.SUBMIT_BUTTON).click()
 
-    def add_new_person(self):
+    def add_new_person(self, count):
         # count = random.randint(1, 40)
-        count = 1
+        # count = 1
         while count != 0:
             self.click_add_button()
             person = self.get_person()
             self.fill_all_fields(person)
             self.click_submit()
             count -= 1
+            yield person
 
     def get_person_data_list(self):
         people_list = self.elements_are_present(self.locators.FULL_PEOPLE_LIST)
@@ -162,9 +163,9 @@ class WebTablePage(BasePage):
                 item_data = {
                     'first_name': item_list[0],
                     'last_name': item_list[1],
-                    'age': item_list[2],
+                    'age': int(item_list[2]),
                     'email': item_list[3],
-                    'salary': item_list[4],
+                    'salary': int(item_list[4]),
                     'department': item_list[5],
                 }
                 data.append(item_data)
@@ -174,4 +175,12 @@ class WebTablePage(BasePage):
 
     def check_new_added_person(self):
         person_data = self.get_person_data_list()
-        print(*person_data, sep='\n')
+        return person_data
+
+    def expand_maximum_rows(self):
+        select_btn = self.element_is_present(self.locators.ROWS_SELECTION_CLICKABLE)
+        self.go_to_element(select_btn)
+        select_btn = self.element_is_visible(self.locators.ROWS_SELECTION_CLICKABLE)
+        select_btn.click()
+        hundred_button = self.element_is_visible(self.locators.SELECT_HUNDRED_ROWS)
+        hundred_button.click()
