@@ -144,8 +144,6 @@ class WebTablePage(BasePage):
         self.element_is_visible(self.locators.SUBMIT_BUTTON).click()
 
     def add_new_person(self, count):
-        # count = random.randint(1, 40)
-        # count = 1
         while count != 0:
             self.click_add_button()
             person = self.get_person()
@@ -184,3 +182,11 @@ class WebTablePage(BasePage):
         select_btn.click()
         hundred_button = self.element_is_visible(self.locators.SELECT_HUNDRED_ROWS)
         hundred_button.click()
+
+    def search_person(self, keyword):
+        self.element_is_visible(self.locators.SEARCH_INPUT).send_keys(keyword)
+
+
+    def check_searched_person(self):
+        table_data = self.get_person_data_list()
+        return table_data

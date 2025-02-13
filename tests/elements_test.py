@@ -10,7 +10,7 @@ class TestElements:
 
     class TestTextBox:
 
-        # @pytest.mark.skip
+        @pytest.mark.skip
         def test_text_box(self, driver):
             text_box_page = TextBoxPage(driver, "https://demoqa.com/text-box")
             text_box_page.open()
@@ -21,7 +21,7 @@ class TestElements:
                 assert in_data == out_data, f'{in_data} mismatches {out_data}'
 
     class TestCheckBox:
-        # @pytest.mark.skip
+        @pytest.mark.skip
         def test_check_box(self, driver):
             check_box_page = CheckBoxPage(driver, "https://demoqa.com/checkbox")
             check_box_page.open()
@@ -33,7 +33,7 @@ class TestElements:
 
     class TestRadioButton:
 
-        # @pytest.mark.skip
+        @pytest.mark.skip
         def test_radio_button(self, driver):
             radio_button_page = RadioButtonPage(driver, "https://demoqa.com/radio-button")
             radio_button_page.open()
@@ -48,7 +48,7 @@ class TestElements:
             assert output_impressive == 'Impressive', "'Impressive' hasn't been selected"
             assert output_no == 'No', "'No' hasn't been selected"
 
-        # @pytest.mark.skip
+        @pytest.mark.skip
         def test_random_radio_buttons(self, driver):
             radio_button_page = RadioButtonPage(driver, "https://demoqa.com/radio-button")
             radio_button_page.open()
@@ -57,7 +57,7 @@ class TestElements:
                 assert result[1] == result[0], f'clicked {result[0]} received {result[1]}'
 
     class TestWebTable:
-        # @pytest.mark.skip
+        @pytest.mark.skip
         def test_web_table_add_person(self, driver):
             web_table_page = WebTablePage(driver, 'https://demoqa.com/webtables')
             web_table_page.open()
@@ -67,3 +67,13 @@ class TestElements:
             person_list_result = web_table_page.get_person_data_list()
             for added_person in added_persons:
                 assert added_person in person_list_result, f'person {added_person} not in result'
+
+        @pytest.mark.skip
+        def test_web_table_search_person(self, driver):
+            web_table_page = WebTablePage(driver, 'https://demoqa.com/webtables')
+            web_table_page.open()
+            added_person = next(web_table_page.add_new_person(1))
+            search_key = added_person["first_name"]
+            web_table_page.search_person(search_key)
+            search_result = web_table_page.check_searched_person()
+            assert len(search_result) == 1 and search_result[0] == added_person

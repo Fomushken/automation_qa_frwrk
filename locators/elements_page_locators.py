@@ -48,6 +48,10 @@ class WebTablePageLocators:
     # table reading
     FULL_PEOPLE_LIST = (By.CSS_SELECTOR, 'div[class="rt-tr-group"]')
 
+    # table expanding
     ROWS_SELECTION_CLICKABLE = (By.CSS_SELECTOR, 'select[aria-label="rows per page"]')
     ROWS_SELECTION = (By.CSS_SELECTOR, 'span[class="select-wrap -pageSizeOptions"]')
     SELECT_HUNDRED_ROWS = By.CSS_SELECTOR, 'option[value="100"]'
+
+    # searching
+    SEARCH_INPUT = (By.CSS_SELECTOR, 'input[id="searchBox"]')
