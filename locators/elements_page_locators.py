@@ -55,3 +55,6 @@ class WebTablePageLocators:
 
     # searching
     SEARCH_INPUT = (By.CSS_SELECTOR, 'input[id="searchBox"]')
+
+    # table_edit
+    UPDATE_BUTTON = (By.CSS_SELECTOR, 'span[title="Edit"]')

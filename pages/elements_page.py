@@ -1,4 +1,5 @@
 import random
+import time
 
 from selenium.webdriver.common.by import By
 
@@ -190,3 +191,17 @@ class WebTablePage(BasePage):
     def check_searched_person(self):
         table_data = self.get_person_data_list()
         return table_data
+
+    def click_edit_button(self):
+        self.element_is_visible(self.locators.UPDATE_BUTTON).click()
+
+    def update_person_info(self):
+        person_data = next(generated_person())
+        age = person_data.age
+        self.click_edit_button()
+        time.sleep(1)
+        age_input = self.element_is_visible(self.locators.AGE_INPUT)
+        age_input.clear()
+        age_input.send_keys(age)
+        self.click_submit()
+        return age

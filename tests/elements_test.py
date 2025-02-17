@@ -46,6 +46,8 @@ class TestElements:
 
             assert output_yes == 'Yes', "'Yes' hasn't been selected"
             assert output_impressive == 'Impressive', "'Impressive' hasn't been selected"
+
+            # "No" button has a bag, the test always fails
             assert output_no == 'No', "'No' hasn't been selected"
 
         @pytest.mark.skip
@@ -77,3 +79,14 @@ class TestElements:
             web_table_page.search_person(search_key)
             search_result = web_table_page.check_searched_person()
             assert len(search_result) == 1 and search_result[0] == added_person
+        @pytest.mark.skip
+        def test_web_table_update_person(self, driver):
+            web_table_page = WebTablePage(driver, 'https://demoqa.com/webtables')
+            web_table_page.open()
+            last_name = next(web_table_page.add_new_person(1))['last_name']
+            time.sleep(1)
+            web_table_page.search_person(last_name)
+            age = web_table_page.update_person_info()
+            time.sleep(1)
+            row = web_table_page.check_searched_person()
+            assert row[0]['age'] == age
