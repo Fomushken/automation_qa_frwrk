@@ -3,7 +3,7 @@ import time
 
 import pytest
 
-from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage, WebTablePage
+from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage, WebTablePage, ButtonsPage
 
 
 class TestElements:
@@ -79,6 +79,7 @@ class TestElements:
             web_table_page.search_person(search_key)
             search_result = web_table_page.check_searched_person()
             assert len(search_result) == 1 and search_result[0] == added_person
+
         @pytest.mark.skip
         def test_web_table_update_person(self, driver):
             web_table_page = WebTablePage(driver, 'https://demoqa.com/webtables')
@@ -90,3 +91,29 @@ class TestElements:
             time.sleep(1)
             row = web_table_page.check_searched_person()
             assert row[0]['age'] == age
+
+        @pytest.mark.skip
+        def test_web_table_delete_person(self, driver):
+            web_table_page = WebTablePage(driver, 'https://demoqa.com/webtables')
+            web_table_page.open()
+            email = next(web_table_page.add_new_person(1))['email']
+            time.sleep(1)
+            web_table_page.search_person(email)
+            web_table_page.delete_person()
+            text = web_table_page.check_deleted_person()
+            assert text == 'No rows found'
+
+    class TestButtonsPage:
+
+        @pytest.mark.skip
+        def test_different_buttons_click(self, driver):
+            buttons_page = ButtonsPage(driver, "https://demoqa.com/buttons")
+            buttons_page.open()
+
+            double = buttons_page.double_click_button()
+            right = buttons_page.right_click_button()
+            click = buttons_page.click_button()
+
+            assert double == "You have done a double click"
+            assert right == "You have done a right click"
+            assert click == "You have done a dynamic click"

@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 
 from generator.generator import generated_person
 from locators.elements_page_locators import TextBoxPageLocators, CheckBoxPageLocators, RadioButtonPageLocators, \
-    WebTablePageLocators
+    WebTablePageLocators, ButtonsPageLocators
 from pages.base_page import BasePage
 
 class TextBoxPage(BasePage):
@@ -205,3 +205,27 @@ class WebTablePage(BasePage):
         age_input.send_keys(age)
         self.click_submit()
         return age
+
+    def delete_person(self):
+        self.element_is_visible(self.locators.DELETE_BUTTON).click()
+
+    def check_deleted_person(self):
+        return self.element_is_present(self.locators.NO_DATA_SIGN).text
+
+class ButtonsPage(BasePage):
+    locators = ButtonsPageLocators()
+
+    def double_click_button(self):
+        self.action_double_click(self.element_is_visible(self.locators.DOUBLE_CLICK_BUTTON))
+        return self.check_clicked_button(self.locators.DOUBLE_CLICK_MESSAGE)
+
+    def right_click_button(self):
+        self.action_right_click(self.element_is_visible(self.locators.RIGHT_CLICK_BUTTON))
+        return self.check_clicked_button(self.locators.RIGHT_CLICK_MESSAGE)
+
+    def click_button(self):
+        self.element_is_visible(self.locators.CLICK_BUTTON).click()
+        return self.check_clicked_button(self.locators.CLICK_MESSAGE)
+
+    def check_clicked_button(self, element):
+        return self.element_is_present(element).text

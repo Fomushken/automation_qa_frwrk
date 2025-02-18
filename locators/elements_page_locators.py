@@ -55,6 +55,18 @@ class WebTablePageLocators:
 
     # searching
     SEARCH_INPUT = (By.CSS_SELECTOR, 'input[id="searchBox"]')
+    NO_DATA_SIGN = (By.CSS_SELECTOR, 'div[class="rt-noData"]')
 
     # table_edit
     UPDATE_BUTTON = (By.CSS_SELECTOR, 'span[title="Edit"]')
+    DELETE_BUTTON = (By.CSS_SELECTOR, 'span[title="Delete"]')
+
+class ButtonsPageLocators:
+    DOUBLE_CLICK_BUTTON = (By.CSS_SELECTOR, 'button[id="doubleClickBtn"]')
+    RIGHT_CLICK_BUTTON = (By.CSS_SELECTOR, 'button[id="rightClickBtn"]')
+    CLICK_BUTTON = (By.XPATH, '//div[3]/button')
+
+    # result
+    DOUBLE_CLICK_MESSAGE = (By.CSS_SELECTOR, 'p[id="doubleClickMessage"]')
+    RIGHT_CLICK_MESSAGE = (By.CSS_SELECTOR, 'p[id="rightClickMessage"]')
+    CLICK_MESSAGE = (By.CSS_SELECTOR, 'p[id="dynamicClickMessage"]')
